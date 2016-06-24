@@ -72,6 +72,7 @@ if(ENABLE_TABIPB_APBS)
   set(TABIPB_LIBNAME TABIPBlib)
   add_library(${TABIPB_LIBNAME} ${LIBFILES})
 
+
   if(BUILD_SHARED_LIBS)
     add_library(${TABIPB_LIBNAME} ${LIBFILES})
     install(TARGETS ${TABIPB_LIBNAME}

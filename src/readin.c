@@ -20,6 +20,10 @@
 #include <string.h>
 #include <stdlib.h>
 
+#ifdef _WIN32
+        #include <windows.h>
+#endif
+
 #include "gl_variables.h"
 #include "array.h"
 
@@ -106,15 +110,33 @@ int readin(char fname[16], char density[16], char probe_radius[16], int mesh_fla
 
   /* Run msms */
         if (mesh_flag == 0) {
+
+                #ifdef _WIN32
+                sprintf(fname_tp, "C:\\Program Files\\msms.exe -if %s%s.xyzr -prob %s "
+                                  "-dens %s -of %s%s",
+                        fpath, fname, probe_radius, density, fpath, fname);
+
+                printf("%s\n", fname_tp);
+                printf("Running MSMS...\n");
+                printf("Doesn't work quite yet...\n");
+
+                #else
                 sprintf(fname_tp, "msms -if %s%s.xyzr -prob %s -dens %s -of %s%s ",
                         fpath, fname, probe_radius, density, fpath, fname);
-                printf("%s\n", fname_tp);
 
+                printf("%s\n", fname_tp);
                 printf("Running MSMS...\n");
+
                 ierr = system(fname_tp);
+                #endif
 
   /* Run NanoShaper */
         } else if (mesh_flag == 1) {
+
+                #ifdef _WIN32
+                printf("Windows does not support using NanoShaper yet...\n");
+
+                #else
                 nsfp = fopen("surfaceConfiguration.prm", "w");
                 fprintf(nsfp, "Grid_scale = %f\n", den);
                 fprintf(nsfp, "Grid_perfil = %f\n", 90.0);
@@ -148,6 +170,7 @@ int readin(char fname[16], char density[16], char probe_radius[16], int mesh_fla
                 ierr = system(fname_tp);
                 ierr = system("rm stderror.txt");
                 ierr = system("rm surfaceConfiguration.prm");
+                #endif
         }
 
   /* read in vert */
